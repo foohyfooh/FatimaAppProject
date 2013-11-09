@@ -106,7 +106,7 @@ public class Scoreboard extends Fragment {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             Log.i("fatimaapp_network", "Has internet");
-            return false;
+            return true;
         }
         Log.w("fatimaapp_network", "Has no internet");
         return false;
