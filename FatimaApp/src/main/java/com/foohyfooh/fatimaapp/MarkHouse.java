@@ -14,7 +14,7 @@ public class MarkHouse extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.mark_house, container, false);
         ListView list = (ListView) rootView.findViewById(R.id.listView);
-        list.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"Someht", "Andor", "fssds", "Someht", "Andor", "fssds", "Someht", "Andor", "fssds", "Someht", "Andor", "fssds"}));
+        list.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"Something", "Another","Data", "Something", "Another","Data", "Something", "Another","Data"}));
         return rootView;
     }
 }
