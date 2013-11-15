@@ -44,15 +44,15 @@ public class Participants extends Fragment {
 
     private List<ParticipantsRow> getParticipants(){
         try {
-            if(NetworkUtils.hasConnection(context)){
+            if(!NetworkUtils.hasConnection(context)){
                 return (List<ParticipantsRow>) Collections.EMPTY_LIST;
             }
-            String url = getString(R.string.participants_url);
-            Log.i("url", url + arg);
-            String body = NetworkUtils.getContent(url + arg);
+            String url = getString(R.string.participants_url) + arg;
+            Log.i("url", url);
+            String body = NetworkUtils.getContent(url);
 
             JSONObject json = new JSONObject(body);
-            Log.i("json_code", String.valueOf(json.getInt("code")));
+            Log.i("fatima_json_code", String.valueOf(json.getInt("code")));
             if(json.getInt("code") != 200){
                 return (List<ParticipantsRow>) Collections.EMPTY_LIST;
             }

@@ -117,6 +117,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         private Fragment[] fragments = {new MarkHouse(), new Scoreboard(), ParticipantsFactory.newInstance("mark")};
         private String[] titles = {"St. Mark", "Scoreboard", "Mark Participants"};
 
+
         public HousePagerAdapter(FragmentManager fm) {
             super(fm);
         }
