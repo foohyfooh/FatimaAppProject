@@ -1,13 +1,14 @@
 package com.foohyfooh.fatimaapp;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.os.Bundle;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -21,12 +22,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    HousePagerAdapter housePagerAdapter;
+
+    private HousePagerAdapter housePagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    ViewPager viewPager;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +39,11 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        //Setup Fragments and Titles
-        Fragment[] fragments = {new MarkHouse(), new Scoreboard()};
-        String[] titles = {"St. Mark", "Scoreboard"};
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        housePagerAdapter = new HousePagerAdapter(getSupportFragmentManager(), fragments, titles);
+        housePagerAdapter = new HousePagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -75,7 +75,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -112,24 +111,20 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class HousePagerAdapter extends FragmentPagerAdapter {
+    public class HousePagerAdapter extends FragmentStatePagerAdapter {
 
-        private Fragment[] fragments;
-        private String[] titles;
+        //Setup Fragments and Titles
+        private Fragment[] fragments = {new MarkHouse(), new Scoreboard(), ParticipantsFactory.newInstance("mark")};
+        private String[] titles = {"St. Mark", "Scoreboard", "Mark Participants"};
 
-        public HousePagerAdapter(FragmentManager fm, Fragment[] fragments, String[] titles) {
+        public HousePagerAdapter(FragmentManager fm) {
             super(fm);
-            this.fragments = fragments;
-            this.titles = titles;
         }
 
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            if(position < fragments.length){
-                return fragments[position];
-            }
-            return null;
+            return position >= 0 && position < fragments.length ? fragments[position] : new MarkHouse();
         }
 
         @Override
@@ -139,10 +134,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if(position < titles.length){
-                return titles[position];
-            }
-            return "Fragment " + position;
+            return position >= 0 && position < titles.length ? titles[position] : getString(R.string.app_name);
         }
     }
 

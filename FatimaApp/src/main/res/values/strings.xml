@@ -3,5 +3,10 @@
 
     <string name="app_name">Fatima App</string>
     <string name="action_settings">Settings</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="scores_header"><![CDATA[<table border="2"><tr><td>Event Name</td><td>St. Matthew</td><td>St. Mark</td><td>St. Luke</td><td>St. John</td></tr>]]></string>
+    <string name="scores_url">http://10.0.2.2/fatima/scores_json.php</string>
+    <string name="participants_url">http://10.0.2.2/fatima/participants_json.php?house=</string>
 
 </resources>

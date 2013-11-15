@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -16,10 +15,9 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
-public abstract class WebFragment extends Fragment {
+public abstract class NetworkUtils {
 
-    public String getContent(String url) throws NullPointerException{
-        if(!hasConnection()) return null;
+    public static String getContent(String url) {
 
         try {
             return new AsyncTask<String, Void, String>(){
@@ -61,9 +59,9 @@ public abstract class WebFragment extends Fragment {
         return null;
     }
 
-    private boolean hasConnection(){
+    public static boolean hasConnection(Context context){
         ConnectivityManager connMgr = (ConnectivityManager)
-                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             Log.i("fatima_network", "Has internet");
@@ -72,4 +70,5 @@ public abstract class WebFragment extends Fragment {
         Log.w("fatima_network", "Has no internet");
         return false;
     }
+
 }
