@@ -39,8 +39,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@id/linearLayout"
-        android:layout_alignBottom="@id/linearLayout"
-        />
+        android:layout_alignBottom="@id/linearLayout"/>
 
 
 </RelativeLayout>

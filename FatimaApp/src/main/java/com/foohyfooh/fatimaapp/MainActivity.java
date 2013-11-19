@@ -12,6 +12,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.foohyfooh.fatimaapp.factory.HouseFactory;
+import com.foohyfooh.fatimaapp.factory.ParticipantsFactory;
+import com.foohyfooh.fatimaapp.fragment.Scoreboard;
+
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
     /**
@@ -114,18 +118,21 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     public class HousePagerAdapter extends FragmentStatePagerAdapter {
 
         //Setup Fragments and Titles
-        private Fragment[] fragments = {new MarkHouse(), new Scoreboard(), ParticipantsFactory.newInstance("mark")};
-        private String[] titles = {"St. Mark", "Scoreboard", "Mark Participants"};
+        private Fragment[] fragments;
+        private String[] titles = {"St. Mark", "Scoreboard", "St. Mark Participants"};
 
 
         public HousePagerAdapter(FragmentManager fm) {
             super(fm);
+            HouseFactory houseFactory = HouseFactory.getInstance();
+            ParticipantsFactory participantsFactory = ParticipantsFactory.getInstance();
+            fragments = new Fragment[]{houseFactory.newHouse("mark"), new Scoreboard(), participantsFactory.newParticipants("mark")};
         }
 
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            return position >= 0 && position < fragments.length ? fragments[position] : new MarkHouse();
+            return position >= 0 && position < fragments.length ? fragments[position] : null;
         }
 
         @Override
