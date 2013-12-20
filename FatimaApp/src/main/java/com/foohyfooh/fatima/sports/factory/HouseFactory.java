@@ -1,9 +1,9 @@
-package com.foohyfooh.fatimaapp.factory;
+package com.foohyfooh.fatima.sports.factory;
 
 
 import android.os.Bundle;
 
-import com.foohyfooh.fatimaapp.fragment.House;
+import com.foohyfooh.fatima.sports.fragment.House;
 
 public class HouseFactory {
     private static HouseFactory instance = new HouseFactory();

@@ -1,4 +1,4 @@
-package com.foohyfooh.fatimaapp.data;
+package com.foohyfooh.fatima.sports.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,12 +7,9 @@ public class ScoreRecord implements Parcelable {
     private int matthew, mark, luke, john;
     private String title;
 
-    public ScoreRecord(String title, int matthew, int mark, int luke, int john){
-        this.title = title;
-        this.matthew = matthew;
-        this.mark = mark;
-        this.luke = luke;
-        this.john = john;
+    private String year;
+
+    public ScoreRecord(){
     }
 
     public int getMatthew() {
@@ -55,12 +52,21 @@ public class ScoreRecord implements Parcelable {
         this.title = title;
     }
 
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
     public ScoreRecord(Parcel in){
         title = in.readString();
         matthew = in.readInt();
         mark = in.readInt();
         luke = in.readInt();
         john = in.readInt();
+        year = in.readString();
     }
 
     @Override
@@ -75,6 +81,7 @@ public class ScoreRecord implements Parcelable {
         out.writeInt(mark);
         out.writeInt(luke);
         out.writeInt(john);
+        out.writeString(year);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

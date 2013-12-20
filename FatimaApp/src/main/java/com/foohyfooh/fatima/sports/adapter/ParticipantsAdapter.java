@@ -1,4 +1,4 @@
-package com.foohyfooh.fatimaapp.adapter;
+package com.foohyfooh.fatima.sports.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.foohyfooh.fatimaapp.R;
-import com.foohyfooh.fatimaapp.data.ParticipantsRow;
+import com.foohyfooh.fatima.sports.R;
+import com.foohyfooh.fatima.sports.data.ParticipantsRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class ParticipantsAdapter extends ArrayAdapter<ParticipantsRow> {
 
         ((TextView) rowView.findViewById(R.id.participants_row_event_name)).setText(row.getEvent());
         ((TextView) rowView.findViewById(R.id.participants_row_participant_names)).setText(formattedParticipantList(participants));
-        ((TextView) rowView.findViewById(R.id.participants_row_year)).setText(String.valueOf(row.getYear()));
+        ((TextView) rowView.findViewById(R.id.participants_row_year)).setText(row.getYear());
 
         return rowView;
     }
@@ -43,7 +43,7 @@ public class ParticipantsAdapter extends ArrayAdapter<ParticipantsRow> {
     public String formattedParticipantList(String participants){
         //about 35 characters fit in the list line on phone
         if(participants.length() > 35)
-            return participants.substring(0, 30).concat(" ...");
+            return participants.substring(0, 30).concat("...");
         return participants;
     }
 

@@ -1,19 +1,14 @@
-package com.foohyfooh.fatimaapp.data;
+package com.foohyfooh.fatima.sports.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class ParticipantsRow implements Parcelable {
 
-    private int id, eventId, year;
-    private String event, participants;
+    private int id, eventId;
+    private String event, participants, house, year;
 
-    public ParticipantsRow(int id, int eventId, String event, String participants, int year) {
-        this.id = id;
-        this.eventId = eventId;
-        this.event = event;
-        this.participants = participants;
-        this.year = year;
+    public ParticipantsRow() {
     }
 
     public int getId() {
@@ -32,14 +27,6 @@ public class ParticipantsRow implements Parcelable {
         this.eventId = eventId;
     }
 
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
-
     public String getEvent() {
         return event;
     }
@@ -56,14 +43,30 @@ public class ParticipantsRow implements Parcelable {
         this.participants = participants;
     }
 
+    public String getHouse() {
+        return house;
+    }
+
+    public void setHouse(String house) {
+        this.house = house;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
     public ParticipantsRow(Parcel in){
         id = in.readInt();
         eventId = in.readInt();
         event = in.readString();
         participants = in.readString();
-        year = in.readInt();
+        house =  in.readString();
+        year = in.readString();
     }
-
 
     @Override
     public int describeContents() {
@@ -76,7 +79,8 @@ public class ParticipantsRow implements Parcelable {
         out.writeInt(eventId);
         out.writeString(event);
         out.writeString(participants);
-        out.writeInt(year);
+        out.writeString(house);
+        out.writeString(year);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

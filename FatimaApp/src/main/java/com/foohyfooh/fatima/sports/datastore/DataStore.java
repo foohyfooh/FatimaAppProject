@@ -1,11 +1,12 @@
-package com.foohyfooh.fatimaapp.datastore;
+package com.foohyfooh.fatima.sports.datastore;
 
 import android.content.Context;
+import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
-import com.foohyfooh.fatimaapp.data.ParticipantsRow;
-import com.foohyfooh.fatimaapp.data.ScoreRecord;
-import com.foohyfooh.fatimaapp.util.NetworkUtils;
+import com.foohyfooh.fatima.sports.data.ParticipantsRow;
+import com.foohyfooh.fatima.sports.data.ScoreRecord;
+import com.foohyfooh.fatima.sports.util.NetworkUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,21 +15,21 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class DataStore {
 
     private DataStore(){}
 
     public static final String BASE_URL = "http://10.0.2.2";
-    private static List<ParticipantsRow> participants;
+    private static Map<String, List<ParticipantsRow>> participants = new ArrayMap<String, List<ParticipantsRow>>();
     private static List<ScoreRecord> scores;
 
     public static List<ParticipantsRow> getCachedParticipants(Context context, String house, boolean refresh){
-        if(!refresh && participants != null){
-            return participants;
+        if(refresh || participants.get(house) == null){
+            participants.put(house, getParticipants(context, house));
         }
-        participants = getParticipants(context, house);
-        return participants;
+        return participants.get(house);
     }
 
     private static List<ParticipantsRow> getParticipants(Context context, String house){
@@ -45,8 +46,8 @@ public class DataStore {
 
         try{
             JSONObject json = new JSONObject(body);
-            Log.i("fatima_json_code", String.valueOf(json.getInt("code")));
             if(json.getInt("code") != 200){
+                Log.i("fatima_json_code", String.valueOf(json.getInt("code")));
                 return (List<ParticipantsRow>) Collections.EMPTY_LIST;
             }
 
@@ -54,12 +55,12 @@ public class DataStore {
             List<ParticipantsRow> rows = new ArrayList<ParticipantsRow>();
             for(int i = 0; i < data.length(); i++){
                 JSONObject jsonObj = data.getJSONObject(i);
-                int id = Integer.parseInt(jsonObj.getString("id")),
-                        eventId = Integer.parseInt(jsonObj.getString("event_id")),
-                        year = Integer.parseInt(jsonObj.getString("year"));
-                String eventTitle = jsonObj.getString("event_title"),
-                        participants = jsonObj.getString("participants");
-                ParticipantsRow row = new ParticipantsRow(id, eventId, eventTitle, participants, year);
+                ParticipantsRow row = new ParticipantsRow();
+                row.setId(Integer.parseInt(jsonObj.getString("id")));
+                row.setEventId(Integer.parseInt(jsonObj.getString("event_id")));
+                row.setEvent(jsonObj.getString("event_title"));
+                row.setParticipants(jsonObj.getString("participants"));
+                row.setYear(jsonObj.getString("year"));
                 rows.add(row);
             }
             return rows;
@@ -71,10 +72,8 @@ public class DataStore {
 
 
     public static List<ScoreRecord> getCachedScores(Context context, boolean refresh){
-        if(!refresh && scores != null){
-            return scores;
-        }
-        scores = getScores(context);
+        if(refresh || scores == null)
+            scores = getScores(context);
         return scores;
     }
 
@@ -90,6 +89,7 @@ public class DataStore {
             JSONObject json = new JSONObject(body);
             //Log.i("fatima_json", json.toString());
             if(json.getInt("code") != 200){
+                Log.i("fatima_json_code", String.valueOf(json.getInt("code")));
                 return (List<ScoreRecord>) Collections.EMPTY_LIST;
             }
 
@@ -100,10 +100,13 @@ public class DataStore {
             for(int i = 0; i < jsonArray.length(); i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 //Log.i("fatima_json_obj", jsonObject.toString());
-                ScoreRecord scoreRecord =
-                        new ScoreRecord(jsonObject.getString("event_title"), Integer.parseInt(jsonObject.getString("matthew")),
-                                Integer.parseInt(jsonObject.getString("mark")), Integer.parseInt(jsonObject.getString("luke")),
-                                Integer.parseInt(jsonObject.getString("john")));
+                ScoreRecord scoreRecord = new ScoreRecord();
+                scoreRecord.setTitle(jsonObject.getString("event_title"));
+                scoreRecord.setMatthew(Integer.parseInt(jsonObject.getString("matthew")));
+                scoreRecord.setMark(Integer.parseInt(jsonObject.getString("mark")));
+                scoreRecord.setLuke(Integer.parseInt(jsonObject.getString("luke")));
+                scoreRecord.setJohn(Integer.parseInt(jsonObject.getString("john")));
+                scoreRecord.setYear(jsonObject.getString("year"));
                 scores.add(scoreRecord);
                 //Log.i("fatima_json_score", scoreRecord.toString());
             }

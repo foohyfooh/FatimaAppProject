@@ -38,8 +38,8 @@
         android:id="@+id/participants_row_participant_names"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/linearLayout"
-        android:layout_alignBottom="@id/linearLayout"/>
+        android:layout_alignBottom="@id/linearLayout"
+        android:layout_toRightOf="@+id/linearLayout" />
 
 
 </RelativeLayout>

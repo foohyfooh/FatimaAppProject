@@ -1,4 +1,4 @@
-package com.foohyfooh.fatimaapp.adapter;
+package com.foohyfooh.fatima.sports.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.foohyfooh.fatimaapp.R;
-import com.foohyfooh.fatimaapp.data.ScoreRecord;
+import com.foohyfooh.fatima.sports.R;
+import com.foohyfooh.fatima.sports.data.ScoreRecord;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,8 @@
-package com.foohyfooh.fatimaapp.factory;
+package com.foohyfooh.fatima.sports.factory;
 
 import android.os.Bundle;
 
-import com.foohyfooh.fatimaapp.fragment.Participants;
+import com.foohyfooh.fatima.sports.fragment.Participants;
 
 public class ParticipantsFactory {
     private static ParticipantsFactory instance = new ParticipantsFactory();

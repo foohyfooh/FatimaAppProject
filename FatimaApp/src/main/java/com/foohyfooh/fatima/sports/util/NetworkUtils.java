@@ -1,9 +1,10 @@
-package com.foohyfooh.fatimaapp.util;
+package com.foohyfooh.fatima.sports.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -53,6 +54,7 @@ public class NetworkUtils {
             return true;
         }
         Log.w("fatima_network", "Has no internet");
+        Toast.makeText(context, "No Connection", Toast.LENGTH_LONG).show();
         return false;
     }
 
