@@ -21,7 +21,7 @@ public class DataStore {
 
     private DataStore(){}
 
-    public static final String BASE_URL = "http://10.0.2.2";
+    public static final String BASE_URL = "http://www.foohyfooh.site11.com/fatima/";
     private static Map<String, List<ParticipantsRow>> participants = new ArrayMap<String, List<ParticipantsRow>>();
     private static List<ScoreRecord> scores;
 
@@ -36,7 +36,7 @@ public class DataStore {
         if(!NetworkUtils.hasConnection(context)){
             return (List<ParticipantsRow>) Collections.EMPTY_LIST;
         }
-        String url = BASE_URL + "/fatima/participants_json.php?house=" + house;
+        String url = BASE_URL + "participants_json.php?house=" + house;
         Log.i("url", url);
         String body = NetworkUtils.getContent(url);
 
@@ -81,7 +81,7 @@ public class DataStore {
         if(!NetworkUtils.hasConnection(context))
             return (List<ScoreRecord>) Collections.EMPTY_LIST;
 
-        String body = NetworkUtils.getContent(BASE_URL + "/fatima/scores_json.php");
+        String body = NetworkUtils.getContent(BASE_URL + "scores_json.php");
         if (body == null){
             return (List<ScoreRecord>) Collections.EMPTY_LIST;
         }
