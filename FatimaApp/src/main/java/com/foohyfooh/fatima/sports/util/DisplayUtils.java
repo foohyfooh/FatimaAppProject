@@ -30,7 +30,7 @@ public class DisplayUtils {
 
     public static void setHeaderImage(View view,Resources resources, int resId, String house){
         ImageView imageView = (ImageView) view.findViewById(resId);
-        Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_launcher);
+        Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.fatima_college_logo);
         if(house.equals("matthew")){
             //Set Matthew Icon
         }else if(house.equals("mark")){

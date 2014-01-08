@@ -2,13 +2,13 @@ package com.foohyfooh.fatima.sports.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,11 +17,12 @@ import com.foohyfooh.fatima.sports.adapter.ParticipantsAdapter;
 import com.foohyfooh.fatima.sports.data.ParticipantsRow;
 import com.foohyfooh.fatima.sports.datastore.DataStore;
 import com.foohyfooh.fatima.sports.util.DisplayUtils;
+import com.foohyfooh.fatima.sports.util.GetTask;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Participants extends Fragment implements AdapterView.OnItemClickListener {
+public class Participants extends Fragment implements AdapterView.OnItemClickListener {
     public static final String ARG_HOUSE = "house";
     public static final String KEY = "participants";
 
@@ -29,7 +30,17 @@ public abstract class Participants extends Fragment implements AdapterView.OnIte
     private Context context;
     private ListView participants;
     private ParticipantsAdapter adapter;
-    List<ParticipantsRow> participantsRows = new ArrayList<ParticipantsRow>();
+    List<ParticipantsRow> participantsRows;
+
+    public Participants(){}
+
+    public static Participants newInstance(String house){
+        Participants p = new Participants();
+        Bundle houseInfo = new Bundle();
+        houseInfo.putString(ARG_HOUSE, house);
+        p.setArguments(houseInfo);
+        return p;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,16 +50,19 @@ public abstract class Participants extends Fragment implements AdapterView.OnIte
         DisplayUtils.setBackgroundColour(rootView, house);
 
         TextView header = (TextView) rootView.findViewById(R.id.participants_header);
-        header.setText( "St. " + Character.toUpperCase(house.charAt(0)) + house.substring(1) + " House");
+        header.setText( "St. " + Character.toUpperCase(house.charAt(0)) + house.substring(1) + " House Participants");
 
         participants = (ListView) rootView.findViewById(R.id.participants_list);
-        if(savedInstanceState != null && savedInstanceState.containsKey(KEY+house))
+        if(savedInstanceState != null && savedInstanceState.containsKey(KEY+house)){
             participantsRows = savedInstanceState.getParcelableArrayList(KEY+house);
-        adapter = new ParticipantsAdapter(context, R.id.participants_list, participantsRows);
+        }else{
+            participantsRows = new ArrayList<ParticipantsRow>();
+        }
+        adapter = new ParticipantsAdapter(context, R.layout.participants_row, participantsRows);
         participants.setAdapter(adapter);
         participants.setOnItemClickListener(this);
 
-        new GetTask().execute(false);
+        new GetParticipants(context, adapter).execute(false);
         return rootView;
     }
 
@@ -67,21 +81,16 @@ public abstract class Participants extends Fragment implements AdapterView.OnIte
     }
 
 
-    private class GetTask extends AsyncTask<Boolean, Void, List<ParticipantsRow>> {
+    private class GetParticipants extends GetTask<ParticipantsRow, ArrayAdapter<ParticipantsRow>>{
 
-        @Override
-        protected List<ParticipantsRow> doInBackground(Boolean... params) {
-            return DataStore.getCachedParticipants(context, house, params[0]);
+
+        public GetParticipants(Context context, ArrayAdapter<ParticipantsRow> adapter) {
+            super(context, adapter);
         }
 
         @Override
-        protected void onPostExecute(List<ParticipantsRow> rows) {
-            //super.onPostExecute(rows);
-            adapter.clear();
-            for(ParticipantsRow row: rows){
-                adapter.add(row);
-            }
-            adapter.notifyDataSetChanged();
+        protected List doInBackground(Boolean... params) {
+            return DataStore.getCachedParticipants(house, params[0]);
         }
     }
 

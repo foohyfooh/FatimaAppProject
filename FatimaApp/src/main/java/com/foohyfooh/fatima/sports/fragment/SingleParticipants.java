@@ -34,7 +34,7 @@ public class SingleParticipants extends ActionBarActivity {
         house = intent.getStringExtra(EXTRA_HOUSE);
         int pos = intent.getIntExtra(EXTRA_POS, 0);
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        List<ParticipantsRow> participantsRows = DataStore.getCachedParticipants(this, house, false);
+        List<ParticipantsRow> participantsRows = DataStore.getCachedParticipants(house, false);
         SingleParticipantsAdapter adapter = new SingleParticipantsAdapter(getSupportFragmentManager(),participantsRows);
         pager.setAdapter(adapter);
         pager.setCurrentItem(pos);

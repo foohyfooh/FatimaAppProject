@@ -1,9 +1,9 @@
 package com.foohyfooh.fatima.sports.datastore;
 
-import android.content.Context;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
+import com.foohyfooh.fatima.sports.data.Member;
 import com.foohyfooh.fatima.sports.data.ParticipantsRow;
 import com.foohyfooh.fatima.sports.data.ScoreRecord;
 import com.foohyfooh.fatima.sports.util.NetworkUtils;
@@ -13,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -21,34 +20,31 @@ public class DataStore {
 
     private DataStore(){}
 
-    public static final String BASE_URL = "http://www.foohyfooh.site11.com/fatima/";
+    public static final String BASE_URL = "http://www.foohyfooh.site11.com/fatima/dev/";
     private static Map<String, List<ParticipantsRow>> participants = new ArrayMap<String, List<ParticipantsRow>>();
     private static List<ScoreRecord> scores;
+    private static Map<String, List<Member>> members = new ArrayMap<String, List<Member>>();
 
-    public static List<ParticipantsRow> getCachedParticipants(Context context, String house, boolean refresh){
-        if(refresh || participants.get(house) == null){
-            participants.put(house, getParticipants(context, house));
+    public static List<ParticipantsRow> getCachedParticipants(String house, boolean refresh){
+        if(refresh || participants.get(house) == null || participants.get(house).isEmpty()){
+            participants.put(house, getParticipants(house));
         }
         return participants.get(house);
     }
 
-    private static List<ParticipantsRow> getParticipants(Context context, String house){
-        if(!NetworkUtils.hasConnection(context)){
-            return (List<ParticipantsRow>) Collections.EMPTY_LIST;
-        }
+    private static List<ParticipantsRow> getParticipants(String house){
         String url = BASE_URL + "participants_json.php?house=" + house;
-        Log.i("url", url);
+        Log.i("fatima_participants_url", url);
         String body = NetworkUtils.getContent(url);
-
         if(body == null){
-            return (List<ParticipantsRow>)Collections.EMPTY_LIST;
+            return new ArrayList<ParticipantsRow>();
         }
 
         try{
             JSONObject json = new JSONObject(body);
             if(json.getInt("code") != 200){
-                Log.i("fatima_json_code", String.valueOf(json.getInt("code")));
-                return (List<ParticipantsRow>) Collections.EMPTY_LIST;
+                Log.i("fatima_participants_json_code", String.valueOf(json.getInt("code")));
+                return new ArrayList<ParticipantsRow>();
             }
 
             JSONArray data = json.getJSONArray("data");
@@ -67,39 +63,38 @@ public class DataStore {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return (List<ParticipantsRow>) Collections.EMPTY_LIST;
+        return new ArrayList<ParticipantsRow>();
     }
 
 
-    public static List<ScoreRecord> getCachedScores(Context context, boolean refresh){
-        if(refresh || scores == null)
-            scores = getScores(context);
+    public static List<ScoreRecord> getCachedScores(boolean refresh){
+        if(refresh || scores == null || scores.isEmpty())
+            scores = getScores();
         return scores;
     }
 
-    private static List<ScoreRecord> getScores(Context context){
-        if(!NetworkUtils.hasConnection(context))
-            return (List<ScoreRecord>) Collections.EMPTY_LIST;
-
-        String body = NetworkUtils.getContent(BASE_URL + "scores_json.php");
+    private static List<ScoreRecord> getScores(){
+        String url = BASE_URL + "scores_json.php";
+        Log.i("fatima_scores_url", url);
+        String body = NetworkUtils.getContent(url);
         if (body == null){
-            return (List<ScoreRecord>) Collections.EMPTY_LIST;
+            return new ArrayList<ScoreRecord>();
         }
         try{
             JSONObject json = new JSONObject(body);
-            //Log.i("fatima_json", json.toString());
+            Log.i("fatima_scores_json", json.toString());
             if(json.getInt("code") != 200){
-                Log.i("fatima_json_code", String.valueOf(json.getInt("code")));
-                return (List<ScoreRecord>) Collections.EMPTY_LIST;
+                Log.i("fatima_scores_json_code", String.valueOf(json.getInt("code")));
+                return new ArrayList<ScoreRecord>();
             }
 
             JSONArray jsonArray = json.getJSONArray("data");
-            //Log.i("fatima_json_array", jsonArray.toString());
+            Log.i("fatima_scores_json_array", jsonArray.toString());
 
             ArrayList<ScoreRecord> scores = new ArrayList<ScoreRecord>();
             for(int i = 0; i < jsonArray.length(); i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                //Log.i("fatima_json_obj", jsonObject.toString());
+                //Log.i("fatima_scores_json_obj", jsonObject.toString());
                 ScoreRecord scoreRecord = new ScoreRecord();
                 scoreRecord.setTitle(jsonObject.getString("event_title"));
                 scoreRecord.setMatthew(Integer.parseInt(jsonObject.getString("matthew")));
@@ -108,15 +103,60 @@ public class DataStore {
                 scoreRecord.setJohn(Integer.parseInt(jsonObject.getString("john")));
                 scoreRecord.setYear(jsonObject.getString("year"));
                 scores.add(scoreRecord);
-                //Log.i("fatima_json_score", scoreRecord.toString());
+                //Log.i("fatima_scores_json_score", scoreRecord.toString());
             }
-            //Log.i("fatima_json_scores", scores.toString());
+            Log.i("fatima_scores_json_scores", scores.toString());
 
             return scores;
         }catch (JSONException e){
             e.printStackTrace();
         }
-        return(List<ScoreRecord>) Collections.EMPTY_LIST;
+        return new ArrayList<ScoreRecord>();
+    }
+
+    public static List<Member> getCachedMembers(String house, boolean refresh){
+        if(refresh || members.get(house) == null || members.get(house).isEmpty()){
+            members.put(house, getMembers(house));
+        }
+        return members.get(house);
+    }
+
+    private static List<Member> getMembers(String house){
+        String url = BASE_URL + "members_json.php?house=" + house;
+        Log.i("fatima_members_url", url);
+        String body = NetworkUtils.getContent(url);
+        if(body == null){
+            return new ArrayList<Member>();
+        }
+
+        try{
+            JSONObject json = new JSONObject(body);
+            Log.i("fatima_members_json", json.toString());
+            if(json.getInt("code") != 200){
+                Log.d("fatima_members_json_code", String.valueOf(json.getInt("code")));
+                return new ArrayList<Member>();
+            }
+
+            JSONArray jsonArray = json.getJSONArray("data");
+            Log.i("fatima_members_json_array", jsonArray.toString());
+
+            ArrayList<Member> members = new ArrayList<Member>();
+            for(int i = 0; i < jsonArray.length(); i++){
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Member member = new Member();
+                member.setName(jsonObject.getString("name"));
+                member.setStatus(jsonObject.getString("status"));
+                member.setHouse(jsonObject.getString("house"));
+                members.add(member);
+            }
+
+
+            return members;
+        }catch (JSONException e){
+            Log.e("fatima_members_error", "", e);
+        }
+
+        return new ArrayList<Member>();
     }
 
 }

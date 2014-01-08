@@ -1,7 +1,6 @@
 package com.foohyfooh.fatima.sports.fragment;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import com.foohyfooh.fatima.sports.R;
 import com.foohyfooh.fatima.sports.adapter.ScoreboardAdapter;
 import com.foohyfooh.fatima.sports.data.ScoreRecord;
 import com.foohyfooh.fatima.sports.datastore.DataStore;
+import com.foohyfooh.fatima.sports.util.GetTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +39,9 @@ public class Scoreboard extends Fragment {
         scoreList = (ListView) root.findViewById(R.id.scoreboard_list);
         scoreList.setAdapter(adapter);
 
-        new GetTask().execute(true);
+        new GetScores(context, adapter).execute(false);
         return root;
     }
-
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -51,22 +49,17 @@ public class Scoreboard extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    private class GetTask extends AsyncTask<Boolean, Void, List<ScoreRecord>> {
+    private class GetScores extends GetTask<ScoreRecord, ScoreboardAdapter>{
 
-        @Override
-        protected List<ScoreRecord> doInBackground(Boolean... params) {
-            return DataStore.getCachedScores(context, params[0]);
+        public GetScores(Context context, ScoreboardAdapter adapter) {
+            super(context, adapter);
         }
 
         @Override
-        protected void onPostExecute(List<ScoreRecord> scores) {
-            //super.onPostExecute(scores);
-            adapter.clear();
-            for(ScoreRecord score: scores){
-                adapter.add(score);
-            }
-            adapter.notifyDataSetChanged();
+        protected List doInBackground(Boolean... params) {
+            return DataStore.getCachedScores(params[0]);
         }
     }
+
 
 }

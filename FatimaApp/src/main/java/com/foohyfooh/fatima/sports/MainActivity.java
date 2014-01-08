@@ -12,9 +12,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.foohyfooh.fatima.sports.factory.HouseFactory;
-import com.foohyfooh.fatima.sports.factory.ParticipantsFactory;
-import com.foohyfooh.fatima.sports.fragment.Scoreboard;
+import com.foohyfooh.fatima.sports.fragment.House;
+import com.foohyfooh.fatima.sports.fragment.ScoreboardTable;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
@@ -119,14 +118,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
 
         //Setup Fragments and Titles
         private Fragment[] fragments;
-        private String[] titles = {"St. Mark", "St. Mark Participants", "Scoreboard", };
+        private String[] titles = {"St. Mark", "Scoreboard", };
 
 
         public HousePagerAdapter(FragmentManager fm) {
             super(fm);
-            HouseFactory houseFactory = HouseFactory.getInstance();
-            ParticipantsFactory participantsFactory = ParticipantsFactory.getInstance();
-            fragments = new Fragment[]{houseFactory.newHouse("mark"), participantsFactory.newParticipants("mark"), new Scoreboard(), };
+            fragments = new Fragment[]{House.newInstance("mark"), new ScoreboardTable(), };
         }
 
         @Override

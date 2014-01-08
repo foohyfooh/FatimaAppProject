@@ -10,14 +10,23 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.foohyfooh.fatima.sports.R;
-import com.foohyfooh.fatima.sports.factory.ParticipantsFactory;
 import com.foohyfooh.fatima.sports.util.DisplayUtils;
 
-public abstract class House extends Fragment implements AdapterView.OnItemClickListener {
+public class House extends Fragment implements AdapterView.OnItemClickListener {
 
     public static final String ARG_HOUSE = "house";
-    private static final String[] options = {"Participants", "Another","Data", "Something", "Another","Data", "Something", "Another","Data"};
+    private static final String[] options = {"Participants", "House Members","Data", "Something", "Another","Data", "Something", "Another","Data"};
     private String house;
+
+    public House(){}
+
+    public static House newInstance(String house){
+        House h = new House();
+        Bundle houseInfo = new Bundle();
+        houseInfo.putString(ARG_HOUSE, house);
+        h.setArguments(houseInfo);
+        return h;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,10 +46,13 @@ public abstract class House extends Fragment implements AdapterView.OnItemClickL
         Fragment fragment;
         switch (position){
             case 0:
-                fragment = ParticipantsFactory.getInstance().newParticipants(house);
+                fragment = Participants.newInstance(house);
+                break;
+            case 1:
+                fragment = HouseMembers.newInstance(house);
                 break;
             default:
-                fragment = ParticipantsFactory.getInstance().newParticipants(house);
+                return;
         }
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.house_layout, fragment).addToBackStack(null).commit();
