@@ -27,17 +27,17 @@ public class ParticipantsAdapter extends ArrayAdapter<ParticipantsRow> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = convertView != null ? convertView : inflater.inflate(R.layout.participants_row, parent, false);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = convertView != null ? convertView : inflater.inflate(R.layout.participants_row, parent, false);
 
         ParticipantsRow row = rows.get(position);
         String participants = row.getParticipants();
 
-        ((TextView) rowView.findViewById(R.id.participants_row_event_name)).setText(row.getEvent());
-        ((TextView) rowView.findViewById(R.id.participants_row_participant_names)).setText(formattedParticipantList(participants));
-        ((TextView) rowView.findViewById(R.id.participants_row_year)).setText(row.getYear());
+        ((TextView) view.findViewById(R.id.participants_row_event_name)).setText(row.getEvent());
+        ((TextView) view.findViewById(R.id.participants_row_participant_names)).setText(formattedParticipantList(participants));
+        ((TextView) view.findViewById(R.id.participants_row_year)).setText(row.getYear());
 
-        return rowView;
+        return view;
     }
 
     public String formattedParticipantList(String participants){

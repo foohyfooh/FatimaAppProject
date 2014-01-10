@@ -5,17 +5,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.TextView;
 
 import com.foohyfooh.fatima.sports.R;
 import com.foohyfooh.fatima.sports.util.DisplayUtils;
 
-public class House extends Fragment implements AdapterView.OnItemClickListener {
+public class House extends Fragment {
 
     public static final String ARG_HOUSE = "house";
-    private static final String[] options = {"Participants", "House Members","Data", "Something", "Another","Data", "Something", "Another","Data"};
     private String house;
 
     public House(){}
@@ -34,27 +31,25 @@ public class House extends Fragment implements AdapterView.OnItemClickListener {
         house = getArguments().getString(ARG_HOUSE);
         DisplayUtils.setHeaderImage(rootView, getResources(), R.id.header_image, house);
         DisplayUtils.setBackgroundColour(rootView, house);
-
-        ListView list = (ListView) rootView.findViewById(R.id.listView);
-        list.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, options ));
-        list.setOnItemClickListener(this);
+        ((TextView) rootView.findViewById(R.id.house_info)).setText(getHouseSummary());
+        getActivity().setTitle("St. " + Character.toUpperCase(house.charAt(0)) + house.substring(1) + " House");
         return rootView;
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Fragment fragment;
-        switch (position){
-            case 0:
-                fragment = Participants.newInstance(house);
-                break;
-            case 1:
-                fragment = HouseMembers.newInstance(house);
-                break;
-            default:
-                return;
+
+
+    private String getHouseSummary(){
+        String info = "Fatima College";
+        if(house.equals("matthew")){
+            info = getString(R.string.matthew_summary);
+        }else if(house.equals("mark")){
+            info = getString(R.string.mark_summary);
+        }else if(house.equals("luke")){
+            info = getString(R.string.luke_summary);
+        }else if(house.equals("john")){
+            info = getString(R.string.john_summary);
         }
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.house_layout, fragment).addToBackStack(null).commit();
+        return info;
     }
+
 }

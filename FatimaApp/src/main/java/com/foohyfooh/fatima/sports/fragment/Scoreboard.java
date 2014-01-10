@@ -13,12 +13,13 @@ import com.foohyfooh.fatima.sports.adapter.ScoreboardAdapter;
 import com.foohyfooh.fatima.sports.data.ScoreRecord;
 import com.foohyfooh.fatima.sports.datastore.DataStore;
 import com.foohyfooh.fatima.sports.util.GetTask;
+import com.foohyfooh.fatima.sports.util.Refreshable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Scoreboard extends Fragment {
+public class Scoreboard extends Fragment implements Refreshable {
 
     private Context context;
     private ScoreboardAdapter adapter;
@@ -49,14 +50,24 @@ public class Scoreboard extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public void refresh(GetTask.PostExecuteTask task) {
+        new GetScores(context, adapter, task).execute(true);
+    }
+
+
     private class GetScores extends GetTask<ScoreRecord, ScoreboardAdapter>{
 
         public GetScores(Context context, ScoreboardAdapter adapter) {
             super(context, adapter);
         }
 
+        public GetScores(Context context, ScoreboardAdapter adapter, PostExecuteTask task) {
+            super(context, adapter, task);
+        }
+
         @Override
-        protected List doInBackground(Boolean... params) {
+        protected List<ScoreRecord> doInBackground(Boolean... params) {
             return DataStore.getCachedScores(params[0]);
         }
     }

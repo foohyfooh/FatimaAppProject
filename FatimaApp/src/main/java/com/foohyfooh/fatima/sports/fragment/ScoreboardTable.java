@@ -12,11 +12,11 @@ import com.foohyfooh.fatima.sports.adapter.ScoreboardAdapter;
 import com.foohyfooh.fatima.sports.data.ScoreRecord;
 import com.foohyfooh.fatima.sports.datastore.DataStore;
 import com.foohyfooh.fatima.sports.util.GetTask;
+import com.foohyfooh.fatima.sports.util.Refreshable;
 
 import java.util.List;
 
-public class ScoreboardTable extends Fragment {
-
+public class ScoreboardTable extends Fragment implements Refreshable {
 
     private Context context;
     private WebView webView;
@@ -29,6 +29,10 @@ public class ScoreboardTable extends Fragment {
         return webView;
     }
 
+    @Override
+    public void refresh(GetTask.PostExecuteTask task) {
+        new GetScoresTable(context, null, task).execute(true);
+    }
 
     public String produceScoreRow(ScoreRecord scoreRecord){
         return String.format("<tr><td>%s</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td></tr>",
@@ -55,14 +59,20 @@ public class ScoreboardTable extends Fragment {
      }
 
 
+
+
     private class GetScoresTable extends GetTask<ScoreRecord, ScoreboardAdapter> {
 
         public GetScoresTable(Context context, ScoreboardAdapter adapter) {
             super(context, adapter);
         }
 
+        public GetScoresTable(Context context, ScoreboardAdapter adapter, PostExecuteTask task) {
+            super(context, adapter, task);
+        }
+
         @Override
-        protected List doInBackground(Boolean... params) {
+        protected List<ScoreRecord> doInBackground(Boolean... params) {
             return DataStore.getCachedScores(params[0]);
         }
 

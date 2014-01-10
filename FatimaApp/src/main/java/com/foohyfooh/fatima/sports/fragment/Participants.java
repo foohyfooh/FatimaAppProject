@@ -18,11 +18,12 @@ import com.foohyfooh.fatima.sports.data.ParticipantsRow;
 import com.foohyfooh.fatima.sports.datastore.DataStore;
 import com.foohyfooh.fatima.sports.util.DisplayUtils;
 import com.foohyfooh.fatima.sports.util.GetTask;
+import com.foohyfooh.fatima.sports.util.Refreshable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Participants extends Fragment implements AdapterView.OnItemClickListener {
+public class Participants extends Fragment implements AdapterView.OnItemClickListener, Refreshable {
     public static final String ARG_HOUSE = "house";
     public static final String KEY = "participants";
 
@@ -73,6 +74,11 @@ public class Participants extends Fragment implements AdapterView.OnItemClickLis
     }
 
     @Override
+    public void refresh(GetTask.PostExecuteTask task) {
+        new GetParticipants(context, adapter, task).execute(true);
+    }
+
+    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getActivity(), SingleParticipants.class);
         intent.putExtra(SingleParticipants.EXTRA_HOUSE, house);
@@ -80,16 +86,19 @@ public class Participants extends Fragment implements AdapterView.OnItemClickLis
         startActivity(intent);
     }
 
+    private class GetParticipants extends GetTask<ParticipantsRow, ParticipantsAdapter>{
 
-    private class GetParticipants extends GetTask<ParticipantsRow, ArrayAdapter<ParticipantsRow>>{
 
-
-        public GetParticipants(Context context, ArrayAdapter<ParticipantsRow> adapter) {
+        public GetParticipants(Context context, ParticipantsAdapter adapter) {
             super(context, adapter);
         }
 
+        public GetParticipants(Context context, ParticipantsAdapter adapter, PostExecuteTask task) {
+            super(context, adapter, task);
+        }
+
         @Override
-        protected List doInBackground(Boolean... params) {
+        protected List<ParticipantsRow> doInBackground(Boolean... params) {
             return DataStore.getCachedParticipants(house, params[0]);
         }
     }

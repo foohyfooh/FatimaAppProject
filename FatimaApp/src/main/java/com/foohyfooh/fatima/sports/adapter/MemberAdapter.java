@@ -26,15 +26,15 @@ public class MemberAdapter extends ArrayAdapter<Member> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rootView = convertView != null ? convertView : inflater.inflate(R.layout.house_members_row, parent, false);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = convertView != null ? convertView : inflater.inflate(R.layout.house_members_row, parent, false);
 
         Member member = members.get(position);
 
-        ((TextView) rootView.findViewById(R.id.house_members_row_name)).setText(member.getName());
-        ((TextView) rootView.findViewById(R.id.house_members_row_status)).setText(member.getStatus());
+        ((TextView) view.findViewById(R.id.house_members_row_name)).setText(member.getName());
+        ((TextView) view.findViewById(R.id.house_members_row_status)).setText(member.getStatus());
 
-        return rootView;
+        return view;
     }
 
     public ArrayList<Member> getMembers(){

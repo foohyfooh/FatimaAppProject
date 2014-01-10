@@ -15,11 +15,12 @@ import com.foohyfooh.fatima.sports.data.Member;
 import com.foohyfooh.fatima.sports.datastore.DataStore;
 import com.foohyfooh.fatima.sports.util.DisplayUtils;
 import com.foohyfooh.fatima.sports.util.GetTask;
+import com.foohyfooh.fatima.sports.util.Refreshable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HouseMembers extends Fragment {
+public class HouseMembers extends Fragment implements Refreshable {
     private static final String ARG_HOUSE = "house";
     private Context context;
     private ListView membersList;
@@ -62,10 +63,17 @@ public class HouseMembers extends Fragment {
         return root;
     }
 
+
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList("members", adapter.getMembers());
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void refresh(GetTask.PostExecuteTask task) {
+        new GetMembers(context, adapter, task).execute(true);
     }
 
     private class GetMembers extends GetTask<Member, MemberAdapter> {
@@ -74,8 +82,12 @@ public class HouseMembers extends Fragment {
             super(context, adapter);
         }
 
+        public GetMembers(Context context, MemberAdapter adapter, PostExecuteTask task) {
+            super(context, adapter, task);
+        }
+
         @Override
-        protected List doInBackground(Boolean... params) {
+        protected List<Member> doInBackground(Boolean... params) {
             return DataStore.getCachedMembers(house, params[0]);
         }
     }

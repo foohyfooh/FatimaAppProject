@@ -21,6 +21,7 @@ public class DataStore {
     private DataStore(){}
 
     public static final String BASE_URL = "http://www.foohyfooh.site11.com/fatima/dev/";
+    //public static final String BASE_URL = "http://10.0.2.2/fatima/dev/";
     private static Map<String, List<ParticipantsRow>> participants = new ArrayMap<String, List<ParticipantsRow>>();
     private static List<ScoreRecord> scores;
     private static Map<String, List<Member>> members = new ArrayMap<String, List<Member>>();
@@ -42,15 +43,17 @@ public class DataStore {
 
         try{
             JSONObject json = new JSONObject(body);
+            Log.i("fatima_participants_json", json.toString());
             if(json.getInt("code") != 200){
                 Log.i("fatima_participants_json_code", String.valueOf(json.getInt("code")));
                 return new ArrayList<ParticipantsRow>();
             }
 
-            JSONArray data = json.getJSONArray("data");
+            JSONArray jsonArray = json.getJSONArray("data");
+            Log.i("fatima_participants_json_array", jsonArray.toString());
             List<ParticipantsRow> rows = new ArrayList<ParticipantsRow>();
-            for(int i = 0; i < data.length(); i++){
-                JSONObject jsonObj = data.getJSONObject(i);
+            for(int i = 0; i < jsonArray.length(); i++){
+                JSONObject jsonObj = jsonArray.getJSONObject(i);
                 ParticipantsRow row = new ParticipantsRow();
                 row.setId(Integer.parseInt(jsonObj.getString("id")));
                 row.setEventId(Integer.parseInt(jsonObj.getString("event_id")));
@@ -105,7 +108,7 @@ public class DataStore {
                 scores.add(scoreRecord);
                 //Log.i("fatima_scores_json_score", scoreRecord.toString());
             }
-            Log.i("fatima_scores_json_scores", scores.toString());
+            //Log.i("fatima_scores_json_scores", scores.toString());
 
             return scores;
         }catch (JSONException e){

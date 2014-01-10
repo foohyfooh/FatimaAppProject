@@ -11,9 +11,19 @@ public abstract class GetTask<T, K extends ArrayAdapter<T>> extends AsyncTask<Bo
 
     private Context context;
     private K adapter;
+    private boolean hasInternet;
+
+    private PostExecuteTask postExecuteTask;
+
     public GetTask(Context context, K adapter) {
+        this(context, adapter, null);
+    }
+
+    public GetTask(Context context, K adapter, PostExecuteTask postExecuteTask) {
         this.context = context;
         this.adapter = adapter;
+        hasInternet = false;
+        this.postExecuteTask = postExecuteTask;
     }
 
     @Override
@@ -21,26 +31,36 @@ public abstract class GetTask<T, K extends ArrayAdapter<T>> extends AsyncTask<Bo
         if(!NetworkUtils.hasConnection(context)){
             cancel(true);
         }
+        hasInternet = true;
     }
 
     @Override
-    protected abstract List doInBackground(Boolean... params);
+    protected abstract List<T> doInBackground(Boolean... params);
 
     //Should make this final but wont as ScoreboardTable is using a makeshift version of this
     @Override
     protected void onPostExecute(List<T> items) {
         //super.onPostExecute(items);
-        if(items.size() == 0)return;
+        if(items == null ||items.size() == 0)return;
+        if(adapter==null) return;
         adapter.clear();
         for(T item: items){
             adapter.add(item);
         }
         adapter.notifyDataSetChanged();
+        if(postExecuteTask != null) postExecuteTask.execute();
     }
 
     @Override
     protected void onCancelled() {
-        Toast.makeText(context, "Turn on internet", Toast.LENGTH_LONG).show();
+        if(!hasInternet){
+            Toast.makeText(context, "Turn on internet", Toast.LENGTH_LONG).show();
+        }
         super.onCancelled();
+    }
+
+
+    public interface PostExecuteTask {
+        public void execute();
     }
 }
