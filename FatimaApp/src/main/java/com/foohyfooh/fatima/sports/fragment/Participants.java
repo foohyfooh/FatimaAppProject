@@ -2,16 +2,17 @@ package com.foohyfooh.fatima.sports.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.foohyfooh.fatima.sports.HouseSelector;
 import com.foohyfooh.fatima.sports.R;
 import com.foohyfooh.fatima.sports.adapter.ParticipantsAdapter;
 import com.foohyfooh.fatima.sports.data.ParticipantsRow;
@@ -24,38 +25,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Participants extends Fragment implements AdapterView.OnItemClickListener, Refreshable {
-    public static final String ARG_HOUSE = "house";
     public static final String KEY = "participants";
 
     private String house;
     private Context context;
     private ListView participants;
     private ParticipantsAdapter adapter;
-    List<ParticipantsRow> participantsRows;
+    private AsyncTask getParticipantsTask;
 
     public Participants(){}
-
-    public static Participants newInstance(String house){
-        Participants p = new Participants();
-        Bundle houseInfo = new Bundle();
-        houseInfo.putString(ARG_HOUSE, house);
-        p.setArguments(houseInfo);
-        return p;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.participants, container, false);
         context = getActivity();
-        house = getArguments().getString(ARG_HOUSE);
+        house = HouseSelector.getHouse();
         DisplayUtils.setBackgroundColour(rootView, house);
 
         TextView header = (TextView) rootView.findViewById(R.id.participants_header);
         header.setText( "St. " + Character.toUpperCase(house.charAt(0)) + house.substring(1) + " House Participants");
 
+        List<ParticipantsRow> participantsRows;
         participants = (ListView) rootView.findViewById(R.id.participants_list);
-        if(savedInstanceState != null && savedInstanceState.containsKey(KEY+house)){
-            participantsRows = savedInstanceState.getParcelableArrayList(KEY+house);
+        if(savedInstanceState != null && savedInstanceState.containsKey(KEY)){
+            participantsRows = savedInstanceState.getParcelableArrayList(KEY);
         }else{
             participantsRows = new ArrayList<ParticipantsRow>();
         }
@@ -63,14 +56,22 @@ public class Participants extends Fragment implements AdapterView.OnItemClickLis
         participants.setAdapter(adapter);
         participants.setOnItemClickListener(this);
 
-        new GetParticipants(context, adapter).execute(false);
+        getParticipantsTask = new GetParticipants(context, adapter).execute(false);
         return rootView;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(KEY+house, adapter.getRows());
+        outState.putParcelableArrayList(KEY, adapter.getRows());
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onDetach() {
+        if(getParticipantsTask.getStatus() == AsyncTask.Status.RUNNING){
+            getParticipantsTask.cancel(true);
+        }
+        super.onDetach();
     }
 
     @Override

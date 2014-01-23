@@ -1,6 +1,7 @@
 package com.foohyfooh.fatima.sports.fragment;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -20,18 +21,20 @@ public class ScoreboardTable extends Fragment implements Refreshable {
 
     private Context context;
     private WebView webView;
+    private AsyncTask getScoresTask;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = getActivity();
         webView = new WebView(context);
         webView.loadData("<table><tr><td>Event Name</td><td>St. Matthew</td><td>St. Mark</td><td>St. Luke</td><td>St. John</td></tr></table>", "text/html", "UTF-8");
-        new GetScoresTable(context, null).execute(false);
+        getScoresTask = new GetScoresTable(context, null).execute(false);
         return webView;
     }
 
     @Override
     public void refresh(GetTask.PostExecuteTask task) {
-        new GetScoresTable(context, null, task).execute(true);
+        getScoresTask = new GetScoresTable(context, null, task).execute(true);
     }
 
     public String produceScoreRow(ScoreRecord scoreRecord){

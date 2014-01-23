@@ -22,9 +22,8 @@ public class NavigationAdapter extends ArrayAdapter<NavigationItem> {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view;
         NavigationItem item  = getItem(position);
-        int resource = item.isHeader ? R.layout.navigation_title : R.layout.navigation_item;
+        int resource = item.getLayoutResource();
         view = convertView != null ? convertView : inflater.inflate(resource, parent, false);
-
         ((TextView) view.findViewById(R.id.navigation_item_title)).setText(item.title);
         return view;
     }

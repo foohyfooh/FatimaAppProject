@@ -42,7 +42,7 @@ public abstract class GetTask<T, K extends ArrayAdapter<T>> extends AsyncTask<Bo
     protected void onPostExecute(List<T> items) {
         //super.onPostExecute(items);
         if(items == null ||items.size() == 0)return;
-        if(adapter==null) return;
+        if(adapter == null) return;
         adapter.clear();
         for(T item: items){
             adapter.add(item);

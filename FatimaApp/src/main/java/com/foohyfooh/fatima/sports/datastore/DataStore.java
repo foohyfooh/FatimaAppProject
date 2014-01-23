@@ -38,7 +38,7 @@ public class DataStore {
         Log.i("fatima_participants_url", url);
         String body = NetworkUtils.getContent(url);
         if(body == null){
-            return new ArrayList<ParticipantsRow>();
+            return null;
         }
 
         try{
@@ -46,7 +46,7 @@ public class DataStore {
             Log.i("fatima_participants_json", json.toString());
             if(json.getInt("code") != 200){
                 Log.i("fatima_participants_json_code", String.valueOf(json.getInt("code")));
-                return new ArrayList<ParticipantsRow>();
+                return null;
             }
 
             JSONArray jsonArray = json.getJSONArray("data");
@@ -66,7 +66,7 @@ public class DataStore {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return new ArrayList<ParticipantsRow>();
+        return null;
     }
 
 
@@ -81,14 +81,14 @@ public class DataStore {
         Log.i("fatima_scores_url", url);
         String body = NetworkUtils.getContent(url);
         if (body == null){
-            return new ArrayList<ScoreRecord>();
+            return null;
         }
         try{
             JSONObject json = new JSONObject(body);
             Log.i("fatima_scores_json", json.toString());
             if(json.getInt("code") != 200){
                 Log.i("fatima_scores_json_code", String.valueOf(json.getInt("code")));
-                return new ArrayList<ScoreRecord>();
+                return null;
             }
 
             JSONArray jsonArray = json.getJSONArray("data");
@@ -114,7 +114,7 @@ public class DataStore {
         }catch (JSONException e){
             e.printStackTrace();
         }
-        return new ArrayList<ScoreRecord>();
+        return null;
     }
 
     public static List<Member> getCachedMembers(String house, boolean refresh){
@@ -129,7 +129,7 @@ public class DataStore {
         Log.i("fatima_members_url", url);
         String body = NetworkUtils.getContent(url);
         if(body == null){
-            return new ArrayList<Member>();
+            return null;
         }
 
         try{
@@ -137,7 +137,7 @@ public class DataStore {
             Log.i("fatima_members_json", json.toString());
             if(json.getInt("code") != 200){
                 Log.d("fatima_members_json_code", String.valueOf(json.getInt("code")));
-                return new ArrayList<Member>();
+                return null;
             }
 
             JSONArray jsonArray = json.getJSONArray("data");
@@ -159,7 +159,7 @@ public class DataStore {
             Log.e("fatima_members_error", "", e);
         }
 
-        return new ArrayList<Member>();
+        return null;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.foohyfooh.fatima.sports;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -99,15 +100,16 @@ public class NavigationDrawerFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
             }
-        })
-        ;mDrawerListView.setAdapter(new NavigationAdapter(
+        });
+        String house = HouseSelector.getHouse();
+        mDrawerListView.setAdapter(new NavigationAdapter(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_1,
                 new NavigationItem[]{
-                        new NavigationItem("Mark House", true),
-                        new NavigationItem("Participants", false),
-                        new NavigationItem("House Members", false),
-                        new NavigationItem("Scoreboard", false),
+                        NavigationItem.newTitle(Character.toUpperCase(house.charAt(0)) + house.substring(1) + " House"),
+                        NavigationItem.newItem("Participants"),
+                        NavigationItem.newItem("House Members"),
+                        NavigationItem.newItem("Scoreboard"),
                 }
         ));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
@@ -251,20 +253,27 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
-        if (item.getItemId() == R.id.action_refresh) {
-            Fragment f = getFragmentManager().findFragmentById(R.id.container);
-            boolean refreshable = f instanceof Refreshable;
-            final MenuItem refresh = item;
-            refresh.setVisible(false);
-            if(refreshable){
+        switch (item.getItemId()){
+            case R.id.action_refresh:
+                Fragment f = getFragmentManager().findFragmentById(R.id.container);
+                final MenuItem refresh = item;
+                refresh.setVisible(false);
+                getActivity().setProgressBarIndeterminateVisibility(true);
                 ((Refreshable) f).refresh(new GetTask.PostExecuteTask() {
                     @Override
                     public void execute() {
                         refresh.setVisible(true);
+                        getActivity().setProgressBarIndeterminateVisibility(false);
+
                     }
                 });
-            }
-            return refreshable;
+                return true;
+            case R.id.action_select_house:
+                Intent intent = new Intent(getActivity(), HouseSelector.class);
+                intent.putExtra(HouseSelector.EXTRA_RESELECT, true);
+                startActivity(intent);
+                getActivity().finish();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

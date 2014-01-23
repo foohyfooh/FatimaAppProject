@@ -6,6 +6,10 @@
         android:title="@string/action_refresh"
         app:showAsAction="ifRoom"
         android:icon="@drawable/refresh"/>
+    <item android:id="@+id/action_select_house"
+        android:title="@string/action_select_house"
+        android:orderInCategory="100"
+        android:showAsAction="never"/>
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"

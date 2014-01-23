@@ -8,10 +8,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.foohyfooh.fatima.sports.HouseSelector;
 import com.foohyfooh.fatima.sports.R;
 import com.foohyfooh.fatima.sports.data.ParticipantsRow;
 import com.foohyfooh.fatima.sports.datastore.DataStore;
@@ -27,17 +29,29 @@ public class SingleParticipants extends ActionBarActivity {
 
     private String house;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_participants_view);
         Intent intent = getIntent();
-        house = intent.getStringExtra(EXTRA_HOUSE);
+        house = HouseSelector.getHouse();
         int pos = intent.getIntExtra(EXTRA_POS, 0);
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         List<ParticipantsRow> participantsRows = DataStore.getCachedParticipants(house, false);
         SingleParticipantsAdapter adapter = new SingleParticipantsAdapter(getSupportFragmentManager(),participantsRows);
         pager.setAdapter(adapter);
         pager.setCurrentItem(pos);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private class SingleParticipantsAdapter extends FragmentStatePagerAdapter{
@@ -67,9 +81,10 @@ public class SingleParticipants extends ActionBarActivity {
         }
     }
 
-    private class SingleParticipantsFragment extends Fragment{
+    public class SingleParticipantsFragment extends Fragment{
 
         private ParticipantsRow participants;
+
         public SingleParticipantsFragment(){}
 
         public SingleParticipantsFragment(ParticipantsRow participants){
@@ -85,7 +100,7 @@ public class SingleParticipants extends ActionBarActivity {
             }
 
             DisplayUtils.setBackgroundColour(rootView, house);
-            DisplayUtils.setHeaderImage(rootView, getResources(), R.id.single_participants_image_header, house);
+            DisplayUtils.setHeaderImage(rootView, R.id.single_participants_image_header, house);
 
             ((TextView) rootView.findViewById(R.id.single_participants_event)).setText(participants.getEvent());
             ((TextView) rootView.findViewById(R.id.single_participants_year)).setText(participants.getYear());

@@ -7,29 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.foohyfooh.fatima.sports.HouseSelector;
 import com.foohyfooh.fatima.sports.R;
 import com.foohyfooh.fatima.sports.util.DisplayUtils;
 
 public class House extends Fragment {
 
-    public static final String ARG_HOUSE = "house";
     private String house;
 
     public House(){}
 
-    public static House newInstance(String house){
-        House h = new House();
-        Bundle houseInfo = new Bundle();
-        houseInfo.putString(ARG_HOUSE, house);
-        h.setArguments(houseInfo);
-        return h;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.house, container, false);
-        house = getArguments().getString(ARG_HOUSE);
-        DisplayUtils.setHeaderImage(rootView, getResources(), R.id.header_image, house);
+        house = HouseSelector.getHouse();
+        DisplayUtils.setHeaderImage(rootView, R.id.header_image, house);
         DisplayUtils.setBackgroundColour(rootView, house);
         ((TextView) rootView.findViewById(R.id.house_info)).setText(getHouseSummary());
         getActivity().setTitle("St. " + Character.toUpperCase(house.charAt(0)) + house.substring(1) + " House");

@@ -1,7 +1,6 @@
 package com.foohyfooh.fatima.sports.util;
 
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -28,9 +27,9 @@ public class DisplayUtils {
         view.setBackgroundColor(colour);
     }
 
-    public static void setHeaderImage(View view,Resources resources, int resId, String house){
+    public static void setHeaderImage(View view, int resId, String house){
         ImageView imageView = (ImageView) view.findViewById(resId);
-        Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.fatima_college_logo);
+        Bitmap bitmap = BitmapFactory.decodeResource(FatimaSports.getAppResources(), R.drawable.fatima_college_logo);
         if(house.equals("matthew")){
             //Set Matthew Icon
         }else if(house.equals("mark")){

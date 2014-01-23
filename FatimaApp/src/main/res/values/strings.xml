@@ -11,5 +11,6 @@
     <string name="matthew_summary">The house of St. Matthew</string>
     <string name="luke_summary">The house of St. Luke</string>
     <string name="john_summary">The house of St. John</string>
+    <string name="action_select_house">Select House</string>
 
 </resources>

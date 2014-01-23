@@ -1,6 +1,7 @@
 package com.foohyfooh.fatima.sports.fragment;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.foohyfooh.fatima.sports.HouseSelector;
 import com.foohyfooh.fatima.sports.R;
 import com.foohyfooh.fatima.sports.adapter.MemberAdapter;
 import com.foohyfooh.fatima.sports.data.Member;
@@ -21,19 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HouseMembers extends Fragment implements Refreshable {
-    private static final String ARG_HOUSE = "house";
+
     private Context context;
     private ListView membersList;
     private MemberAdapter adapter;
     private String house;
+    private AsyncTask getMembersTask;
 
-    public static HouseMembers newInstance(String house) {
-        HouseMembers fragment = new HouseMembers();
-        Bundle args = new Bundle();
-        args.putString(ARG_HOUSE, house);
-        fragment.setArguments(args);
-        return fragment;
-    }
     public HouseMembers() {}
 
     @Override
@@ -42,7 +38,7 @@ public class HouseMembers extends Fragment implements Refreshable {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.house_members, container, false);
         context = getActivity();
-        house = getArguments().getString(ARG_HOUSE);
+        house = HouseSelector.getHouse();
         DisplayUtils.setBackgroundColour(root, house);
 
         TextView header = (TextView) root.findViewById(R.id.house_members_header);
@@ -59,11 +55,9 @@ public class HouseMembers extends Fragment implements Refreshable {
         adapter = new MemberAdapter(context, R.layout.house_members_row, members);
         membersList.setAdapter(adapter);
 
-        new GetMembers(context, adapter).execute(false);
+        getMembersTask = new GetMembers(context, adapter).execute(false);
         return root;
     }
-
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -73,7 +67,7 @@ public class HouseMembers extends Fragment implements Refreshable {
 
     @Override
     public void refresh(GetTask.PostExecuteTask task) {
-        new GetMembers(context, adapter, task).execute(true);
+        getMembersTask = new GetMembers(context, adapter, task).execute(true);
     }
 
     private class GetMembers extends GetTask<Member, MemberAdapter> {

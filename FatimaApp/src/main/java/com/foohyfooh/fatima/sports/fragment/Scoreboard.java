@@ -1,6 +1,7 @@
 package com.foohyfooh.fatima.sports.fragment;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,7 +25,7 @@ public class Scoreboard extends Fragment implements Refreshable {
     private Context context;
     private ScoreboardAdapter adapter;
     private ListView scoreList;
-
+    private AsyncTask getScoresTask;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class Scoreboard extends Fragment implements Refreshable {
         scoreList = (ListView) root.findViewById(R.id.scoreboard_list);
         scoreList.setAdapter(adapter);
 
-        new GetScores(context, adapter).execute(false);
+        getScoresTask = new GetScores(context, adapter).execute(false);
         return root;
     }
 

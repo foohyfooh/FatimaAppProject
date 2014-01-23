@@ -1,5 +1,6 @@
 package com.foohyfooh.fatima.sports;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,11 +9,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.foohyfooh.fatima.sports.fragment.House;
 import com.foohyfooh.fatima.sports.fragment.HouseMembers;
 import com.foohyfooh.fatima.sports.fragment.Participants;
 import com.foohyfooh.fatima.sports.fragment.ScoreboardTable;
+import com.foohyfooh.fatima.sports.util.Refreshable;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -27,12 +30,12 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
-    private Fragment[] fragments = {House.newInstance("mark"), Participants.newInstance("mark"),
-            HouseMembers.newInstance("mark"), new ScoreboardTable()};
+    private Fragment[] fragments = {new House(), new Participants(), new HouseMembers(), new ScoreboardTable()};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -71,7 +74,9 @@ public class MainActivity extends ActionBarActivity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
+            int menuId = getSupportFragmentManager().findFragmentById(R.id.container)
+                    instanceof Refreshable ? R.menu.main : R.menu.global;
+            getMenuInflater().inflate(menuId, menu);
             restoreActionBar();
             return true;
         }
