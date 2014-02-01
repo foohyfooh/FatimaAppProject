@@ -16,9 +16,9 @@ public class DisplayUtils {
     public static void setBackgroundColour(View view, String house){
         int colour = Color.WHITE;
         if(house.equals("matthew")){
-            colour = Color.parseColor("#fffd12");
+            colour = Color.parseColor("#fffd12");//#f1f201
         }else if(house.equals("mark")){
-            colour = Color.parseColor("#006400");
+            colour = Color.parseColor("#128b18");//#006400
         }else if(house.equals("luke")){
             colour = Color.parseColor("#ff0006");
         }else if(house.equals("john")){
@@ -29,16 +29,19 @@ public class DisplayUtils {
 
     public static void setHeaderImage(View view, int resId, String house){
         ImageView imageView = (ImageView) view.findViewById(resId);
-        Bitmap bitmap = BitmapFactory.decodeResource(FatimaSports.getAppResources(), R.drawable.fatima_college_logo);
+        int resource;
         if(house.equals("matthew")){
-            //Set Matthew Icon
+            resource = R.drawable.fatima_matthew_logo;
         }else if(house.equals("mark")){
-            //Set Mark Icon
+            resource = R.drawable.fatima_mark_logo;
         }else if(house.equals("luke")){
-            //Set Luke Icon
+            resource = R.drawable.fatima_luke_logo;
         }else if(house.equals("john")){
-            //Set John Icon
+            resource = R.drawable.fatima_john_logo;
+        }else{
+            resource = R.drawable.fatima_college_logo;
         }
+        Bitmap bitmap = BitmapFactory.decodeResource(FatimaSports.getAppResources(), resource);
         imageView.setImageBitmap(bitmap);
     }
 
