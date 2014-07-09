@@ -16,17 +16,15 @@ import java.util.List;
 public class ScoreboardAdapter extends ArrayAdapter<ScoreRecord> {
 
 
-    private Context context;
     private List<ScoreRecord> scores;
     public ScoreboardAdapter(Context context, int resource, List<ScoreRecord> scores) {
         super(context, resource, scores);
-        this.context = context;
         this.scores = scores;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = convertView != null ? convertView : inflater.inflate(R.layout.scoreboard_row, parent, false);
 
         ScoreRecord score = scores.get(position);

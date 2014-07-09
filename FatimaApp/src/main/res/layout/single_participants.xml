@@ -6,10 +6,10 @@
 
     <ImageView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:id="@+id/single_participants_image_header"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/ic_launcher"
+        android:src="@drawable/fatima_college_logo"
         android:layout_weight=".5"/>
 
     <LinearLayout

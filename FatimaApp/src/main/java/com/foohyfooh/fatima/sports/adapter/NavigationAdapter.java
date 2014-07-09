@@ -20,10 +20,9 @@ public class NavigationAdapter extends ArrayAdapter<NavigationItem> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        View view;
         NavigationItem item  = getItem(position);
         int resource = item.getLayoutResource();
-        view = convertView != null ? convertView : inflater.inflate(resource, parent, false);
+        View view = convertView != null ? convertView : inflater.inflate(resource, parent, false);
         ((TextView) view.findViewById(R.id.navigation_item_title)).setText(item.title);
         return view;
     }

@@ -44,9 +44,9 @@ public class NetworkUtils {
         return null;
     }
 
-    public static boolean hasConnection(Context context){
+    public static boolean hasConnection(){
         ConnectivityManager connMgr = (ConnectivityManager)
-                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                FatimaSports.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             Log.i("fatima_network", "Has internet");

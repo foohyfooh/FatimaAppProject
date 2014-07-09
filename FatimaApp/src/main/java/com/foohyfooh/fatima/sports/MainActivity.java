@@ -1,6 +1,5 @@
 package com.foohyfooh.fatima.sports;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,13 +7,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.Window;
 
+import com.foohyfooh.fatima.sports.fragment.About;
 import com.foohyfooh.fatima.sports.fragment.House;
 import com.foohyfooh.fatima.sports.fragment.HouseMembers;
+import com.foohyfooh.fatima.sports.fragment.NavigationDrawerFragment;
 import com.foohyfooh.fatima.sports.fragment.Participants;
-import com.foohyfooh.fatima.sports.fragment.ScoreboardTable;
+import com.foohyfooh.fatima.sports.fragment.Scoreboard;
 import com.foohyfooh.fatima.sports.util.Refreshable;
 
 public class MainActivity extends ActionBarActivity
@@ -30,7 +30,7 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
-    private Fragment[] fragments = {new House(), new Participants(), new HouseMembers(), new ScoreboardTable()};
+    private Fragment[] fragments = {new House(), new Participants(), new HouseMembers(), new Scoreboard(), new About()};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,18 +81,6 @@ public class MainActivity extends ActionBarActivity
             return true;
         }
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-           return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 }

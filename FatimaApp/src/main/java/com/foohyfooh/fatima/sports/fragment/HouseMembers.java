@@ -30,8 +30,6 @@ public class HouseMembers extends Fragment implements Refreshable {
     private String house;
     private AsyncTask getMembersTask;
 
-    public HouseMembers() {}
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,7 +53,7 @@ public class HouseMembers extends Fragment implements Refreshable {
         adapter = new MemberAdapter(context, R.layout.house_members_row, members);
         membersList.setAdapter(adapter);
 
-        getMembersTask = new GetMembers(context, adapter).execute(false);
+        getMembersTask = new GetMembers(context).execute(false);
         return root;
     }
 
@@ -66,23 +64,44 @@ public class HouseMembers extends Fragment implements Refreshable {
     }
 
     @Override
+    public void onDetach() {
+        if(getMembersTask.getStatus() == AsyncTask.Status.RUNNING){
+            getMembersTask.cancel(true);
+        }
+        super.onDetach();
+    }
+
+    @Override
     public void refresh(GetTask.PostExecuteTask task) {
         getMembersTask = new GetMembers(context, adapter, task).execute(true);
     }
 
-    private class GetMembers extends GetTask<Member, MemberAdapter> {
+    private class GetMembers extends GetTask<List<Member>>{
 
-        public GetMembers(Context context, MemberAdapter adapter) {
-            super(context, adapter);
+        public GetMembers(Context context) {
+            super(context);
         }
 
         public GetMembers(Context context, MemberAdapter adapter, PostExecuteTask task) {
-            super(context, adapter, task);
+            super(context, task);
         }
 
         @Override
         protected List<Member> doInBackground(Boolean... params) {
             return DataStore.getCachedMembers(house, params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(List<Member> items) {
+            //super.onPostExecute(items);
+            if(items == null ||items.size() == 0)return;
+            if(adapter == null) return;
+            adapter.clear();
+            for(Member item: items){
+                adapter.add(item);
+            }
+            adapter.notifyDataSetChanged();
+            if(getPostExecuteTask() != null) getPostExecuteTask().execute();
         }
     }
 

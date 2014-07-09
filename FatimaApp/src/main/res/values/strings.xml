@@ -7,10 +7,10 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_refresh">Refresh</string>
-    <string name="mark_summary">The house of St. Mark</string>
-    <string name="matthew_summary">The house of St. Matthew</string>
-    <string name="luke_summary">The house of St. Luke</string>
-    <string name="john_summary">The house of St. John</string>
+    <string name="mark_summary">The House of St. Mark.\nSymbolised by the winged lion which represents the power of the word and a call for spiritual elevation to strive to be distinguished indivuals in society.\nFeast Day: 25th April</string>
+    <string name="matthew_summary">The House of St. Matthew.\nSymbolised by the angel which represents humans stiving to become more divine. It calls each person to use their talents and skills for the betterment of humanity.\nFeast Day: 21st September</string>
+    <string name="luke_summary">The House of St. Luke.\nSymbolised by a winged bull which represents sacrfice and passion.\nFeast Day: 18th October</string>
+    <string name="john_summary">The House of St. John.\Symbolised by an eagle which represents humans looking forward to an eternity without flinching as they journey towards their goal of union with God.\nFeast Day: 27th Decemeber</string>
     <string name="action_select_house">Select House</string>
 
 </resources>

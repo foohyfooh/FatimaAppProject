@@ -15,8 +15,6 @@ public class House extends Fragment {
 
     private String house;
 
-    public House(){}
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.house, container, false);

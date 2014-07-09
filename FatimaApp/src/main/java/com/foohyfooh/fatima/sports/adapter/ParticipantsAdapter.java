@@ -15,19 +15,17 @@ import java.util.List;
 
 public class ParticipantsAdapter extends ArrayAdapter<ParticipantsRow> {
 
-    private final Context context;
     private final List<ParticipantsRow> rows;
 
     public ParticipantsAdapter(Context context, int resource, List<ParticipantsRow> rows) {
         super(context, resource, rows);
-        this.context = context;
         this.rows = rows;
     }
 
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = convertView != null ? convertView : inflater.inflate(R.layout.participants_row, parent, false);
 
         ParticipantsRow row = rows.get(position);

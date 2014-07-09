@@ -15,18 +15,16 @@ import java.util.List;
 
 public class MemberAdapter extends ArrayAdapter<Member> {
 
-    private Context context;
     private List<Member> members;
 
     public MemberAdapter(Context context, int resource, List<Member> members) {
         super(context, resource, members);
-        this.context = context;
         this.members = members;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = convertView != null ? convertView : inflater.inflate(R.layout.house_members_row, parent, false);
 
         Member member = members.get(position);
